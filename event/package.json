@@ -1,0 +1,11 @@
+{
+	"name":"shynome.event"
+	,"version":"1.0.0"
+	,"description":"event 事件 监听 触发 shynome es6 es5"
+	,"bugs":{
+		"email":"shynome@gmail.com"
+	}
+	,"main":"./event.js"
+	,"people fields":"shynome"
+	,"engines": { "node" : ">=4.0.0" }
+}
