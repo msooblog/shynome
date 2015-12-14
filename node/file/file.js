@@ -15,33 +15,26 @@ return function (req,res,pathname){
 		pathname	=	path.join(root,pathname)
 		fs.exists( pathname , (exists) => {
 			if( !exists ){
-				res.writeHead(500,{'Content-Type':'text/plain;charset=utf-8'})
+				res.writeHead(404,{'Content-Type':'text/plain;charset=utf-8'})
 				res.end(pathname+'不存在')
 			}else{
 				let states=fs.statSync(pathname)
-				let range=((range)=>{if( range === undefined )return 0;else return parseFloat(range.slice(6))})(req.headers.range)
-
-				if( range === 0)res.writeHead({'Accept-Range': 'bytes'});
-				else res.writeHead({'Content-Range': 'bytes ' + range + '-' + (states.size - 1) + '/' + states.size});
-
-				if(isNaN(range)){
-					res.writeHead(500)
-					res.end()
-					return
-				}
-				
+				let range = ( ( range ) => {if( range === undefined ) return 0 ;else return parseFloat(range.slice(6)) })(req.headers.range)
+				let msgLength = states.size - range
+				if(isNaN(range))res.writeHead(500).end();
 				res.writeHead(206,{
 					'Content-Type':content['type']+';charset='+content['encode']
-					,'Content-Length':states.size-range
+					,'Content-Length': msgLength
+					,'Content-Range':`bytes ${range}-${msgLength - 1}/${msgLength}`
 				})
-				console.log(req.headers.range,range)
-				fs.createReadStream( pathname ,{ start: range })
-					.on('data',(chunk)=>res.write(chunk,content['encode']))
-					.on('end',()=>{res.writeHead(200);res.end()})
+				console.log(states.size - range,range,states.size)
+				let i=0
+				fs.createReadStream( pathname ,{start:range})
 					.on('error',(e)=>{
 						res.writeHead(500,{'Content-Type':'text/plain;charset=utf-8'})
 						res.end(pathname+'读取错误')
 					})
+					.pipe(res).on('data',()=>{console.log('eee')}).on('end',()=>res.writeHead(200))
 			}
 		})
 		return
