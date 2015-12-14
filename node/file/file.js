@@ -13,17 +13,35 @@ return function (req,res,pathname){
 	if( content && typeof pathname	===	'string' ){
 		if(!content['encode'])content['encode']	=	'utf8';
 		pathname	=	path.join(root,pathname)
-		fs.readFile(pathname,content['encode'],function(err,data){
-			if(err){
+		fs.exists( pathname , (exists) => {
+			if( !exists ){
 				res.writeHead(500,{'Content-Type':'text/plain;charset=utf-8'})
-				res.end(pathname+'失败')
+				res.end(pathname+'不存在')
 			}else{
-				res.writeHead(200,{
+				let states=fs.statSync(pathname)
+				let range=((range)=>{if( range === undefined )return 0;else return parseFloat(range.slice(6))})(req.headers.range)
+
+				if( range === 0)res.writeHead({'Accept-Range': 'bytes'});
+				else res.writeHead({'Content-Range': 'bytes ' + range + '-' + (states.size - 1) + '/' + states.size});
+
+				if(isNaN(range)){
+					res.writeHead(500)
+					res.end()
+					return
+				}
+				
+				res.writeHead(206,{
 					'Content-Type':content['type']+';charset='+content['encode']
-					,'Content-Length':fs.statSync(pathname).size
+					,'Content-Length':states.size-range
 				})
-				res.write(data,content['encode'])
-				res.end()
+				console.log(req.headers.range,range)
+				fs.createReadStream( pathname ,{ start: range })
+					.on('data',(chunk)=>res.write(chunk,content['encode']))
+					.on('end',()=>{res.writeHead(200);res.end()})
+					.on('error',(e)=>{
+						res.writeHead(500,{'Content-Type':'text/plain;charset=utf-8'})
+						res.end(pathname+'读取错误')
+					})
 			}
 		})
 		return
