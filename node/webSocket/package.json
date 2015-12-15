@@ -1,0 +1,11 @@
+{
+	"name":"shynome.webSocket"
+	,"version":"1.0.0"
+	,"description":"webSocket shynome es6"
+	,"bugs":{
+		"email":"shynome@gmail.com"
+	}
+	,"main":"./net.js"
+	,"people fields":"shynome"
+	,"engines": { "node" : ">=4.0.0" }
+}
