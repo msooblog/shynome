@@ -2,7 +2,7 @@
 
 let 	crypto=require('crypto');
 const	Port = 500
-,		Client = []//用数组是不行的啦！
+,		Client = require('../../array/array.es5.js')//用数组是不行的啦！
 ,		Ws = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'//webSocket,魔法字符串
 
 
@@ -39,5 +39,6 @@ Sec-WebSocket-Accept: ${crypto_key}
 
 process.stdin.on('data',() => Server.getConnections((error,count)=>{
 	if(error)console.log(`获取连接数失败，原因${error}`);
-	else console.log(`连接数:${count}`)
+	else console.log(`连接数:${count}`);
+	for(var i in Client){console.log(i)}
 }))

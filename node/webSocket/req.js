@@ -1,6 +1,5 @@
 'use strict'
 
-'use strict'
 const x=Object.create([])
 x.push('dsd')
 x.push('dsdsada')
