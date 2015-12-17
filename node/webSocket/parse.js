@@ -1,6 +1,8 @@
 'use strict'
 let	log		=	(...rest) => console.log(...rest)
-let parse = data => {
+,	toWs	=	(...rest) => require('./toWs')(...rest)
+let parse = (data,socket) => {
+	log(data[0].toString(2),(new Date()).toString())
 	let i=0,frame={
 		FIN:data[i]>>7
 		,RSV:(data[i]>>4)&7
@@ -14,8 +16,11 @@ let parse = data => {
 	frame.Key = (!frame.Mask) || [data[++i],data[++i],data[++i],data[++i]]
 	frame.Data = data.slice(++i,i+frame.Length)
 	if(frame.Key)frame.Data.forEach((e,indexOf,self)=>self[indexOf]=(e^frame.Key[indexOf%4]));
-	log('----------------------------------------------------------------------------------')
+	log('_____________________________________________________________________________________________________')
 	log(frame)
+	socket.write(toWs('--555--',0,1))
+	socket.write(toWs('--666--',0,0))
+	socket.write(toWs('--888--',1,0))
 	return frame
 }
 
