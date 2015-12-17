@@ -1,15 +1,16 @@
 'use strict'
+require('../file/watchDir')(__dirname)//监控整个文件夹
 
-let 	crypto=require('crypto')
-,		parse = require('./parse')
-const	Port = 500
+const 	crypto=require('crypto')
 ,		Client = require('../../array/array.es5.js')//用数组是不行的啦！
 ,		Ws = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'//webSocket,魔法字符串
+let		Port = 500
+,		parse = data => require('./parse')(data)
+,		toWs  =	data => require('./toWs')(data)
 
 
 const   Server = require('net').createServer( ( socket ) => {
 	const indexOf = Client.push( socket )
-	console.log(indexOf)
 	socket
 		.once('data',(data) => {
 			let key = data.toString().match(/Sec-WebSocket-Key: (.+)/)
@@ -26,7 +27,7 @@ Sec-WebSocket-Accept: ${crypto_key}
 
 `)
 			//成功后监听数据
-			socket.on('data',(data)=>{console.log(parse(data))})
+			socket.on('data',(data)=>{try{parse(data)}catch(error){console.log(error)}})
 		})
 		.setTimeout( 1000*60 , () => console.log(`客户端${indexOf}一分钟没有活动了`) )
 		.on('error',() => console.log(Client.splice(indexOf,1)))
@@ -38,8 +39,7 @@ Sec-WebSocket-Accept: ${crypto_key}
 
 }).listen( Port , () => console.log(`webSocket is on Port ${Port}`) )
 
-process.stdin.on('data',() => Server.getConnections((error,count)=>{
-	if(error)console.log(`获取连接数失败，原因${error}`);
-	else console.log(`连接数:${count}`);
-	for(var i in Client){console.log(i)}
-}))
+process.stdin.on('data',data => {
+	for(var i in Client){
+		Client[i].write(toWs(data))
+	}})

@@ -1,7 +1,7 @@
 {
 	"name":"shynome.webSocket"
 	,"version":"1.0.0"
-	,"description":"webSocket shynome es6"
+	,"description":"webSocket shynome es6 --harmony_rest_parameters"
 	,"bugs":{
 		"email":"shynome@gmail.com"
 	}

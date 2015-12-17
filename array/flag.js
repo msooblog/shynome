@@ -1,0 +1,1 @@
+module.exports = (...r)=>{console.log(JSON.stringify(r))}

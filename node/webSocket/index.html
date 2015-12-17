@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>webSocet</title>
+</head>
+<body>
+	<script>
+	var socket = new WebSocket('ws:127.0.0.1:500')
+	socket.onclose=function(){console.log('连接关闭')}
+	socket.onerror=function(){console.log('连接错误')}
+	socket.onmessage=function(data){console.log('数据:'+data)}
+	socket.onopen=function(){console.log('连接成功')}
+	</script>
+</body>
+</html>
