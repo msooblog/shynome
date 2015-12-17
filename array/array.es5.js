@@ -13,14 +13,14 @@ var _arr = {
 		var Rest = arguments
 		for(var i in arguments){
 			var e = arguments[i];
-			return ( this.__proto__._null.length && (function(e){
-				var id = this.__proto__._null.shift()
-				this[ id ] = e 
-				return id
+			( this.__proto__._null.length && (function(e){
+				this[this.__proto__._null.shift()] = e 
+				console.log(this)
+				return true
 			}).apply(this,[e]) ) || (function(e){ 
-				var id = this.__proto__._length
+				console.log(this.__proto__._length)
 				this[this.__proto__._length++] = e
-				return id
+				return true
 			}).apply(this,[e])
 		}
 	}}

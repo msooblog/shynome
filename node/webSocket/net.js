@@ -1,15 +1,14 @@
 'use strict'
 
-let 	crypto=require('crypto')
-,		parse = require('./parse')
+let 	crypto=require('crypto');
 const	Port = 500
 ,		Client = require('../../array/array.es5.js')//用数组是不行的啦！
 ,		Ws = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'//webSocket,魔法字符串
 
 
 const   Server = require('net').createServer( ( socket ) => {
-	const indexOf = Client.push( socket )
-	console.log(indexOf)
+	const indexOf = Client.length
+	Client.push( socket )
 	socket
 		.once('data',(data) => {
 			let key = data.toString().match(/Sec-WebSocket-Key: (.+)/)
@@ -25,8 +24,8 @@ Connection: Upgrade
 Sec-WebSocket-Accept: ${crypto_key}
 
 `)
-			//成功后监听数据
-			socket.on('data',(data)=>{console.log(parse(data))})
+
+			socket.on('data',(data)=>{console.log(data.toString())})
 		})
 		.setTimeout( 1000*60 , () => console.log(`客户端${indexOf}一分钟没有活动了`) )
 		.on('error',() => console.log(Client.splice(indexOf,1)))
