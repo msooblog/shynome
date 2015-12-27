@@ -6,8 +6,15 @@
 </head>
 <body>
 	<script>
-	var socket = new WebSocket('ws:127.0.0.1:500')
-	socket.onclose=function(){console.log('连接关闭')}
+	var l= (j,s)=> (j && l(--j,s+s) ) || s
+	var socket = new WebSocket('ws:127.0.0.1')
+	,	Time=0
+	var iTime=setInterval(()=>Time+=100,100)
+	socket.onclose=function(){
+		clearInterval(iTime)
+		console.log('连接关闭')
+		console.log(Time)
+	}
 	socket.onerror=function(){console.log('连接错误')}
 	socket.onmessage=function(e){console.log('数据:',e.data)}
 	socket.onopen=function(){console.log('连接成功')}

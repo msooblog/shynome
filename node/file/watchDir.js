@@ -1,4 +1,15 @@
 'use strict'
+/*
+*自己写的一个小插件感觉很不错
+*只要将原先这样写的：
+*var func=require(module)
+*，	 config=require(config)
+*改成这样：
+*var func=(...r)=>require(module)(...r)
+*,	 config=()=>require(config)//使用时config(),或者直接require(config)
+*就可以实时更新文件缓存
+*至于会不会爆内存我就不知道哦
+ */
 const 	path	=	require('path')
 ,		fs		=	require('fs')
 ,		log		=	(...rest) => {}

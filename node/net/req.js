@@ -1,8 +1,21 @@
 'use strict'
-	let client=require('net').connect({port : 2233},()=>console.log('连接服务器成功'))
-	client
-	.on('data',(data) => console.log(data.toString()) )
-	.on('end',() => console.log('连接中断'))
-	.on('error',() => console.log('意外错误'))
 
-process.stdin.on('data',(data)=>client.write(data))
+const x=Object.create([])
+x.push('dsd')
+x.push('dsdsada')
+x.push('sdaaaaaaaaaa')
+console.log(x[1])
+x.splice(0,1)
+x.splice(2,1)
+console.log(x[1])
+
+const Port = 500
+
+let Client=require('net').connect( Port , () => console.log(`连接成功`))
+
+Client
+	.on('error',(error) => console.log(`错误出现:${error}`))
+	.on('data',(data) => console.log(data.toString()))
+	.on('end',() => console.log(`服务器关闭连接`))
+
+process.stdin.pipe(Client)

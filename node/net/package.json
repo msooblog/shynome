@@ -5,7 +5,7 @@
 	,"bugs":{
 		"email":"shynome@gmail.com"
 	}
-	,"main":"./net.js"
+	,"main":"./server.js"
 	,"people fields":"shynome"
 	,"engines": { "node" : ">=4.0.0" }
 }

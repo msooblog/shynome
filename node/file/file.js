@@ -27,7 +27,6 @@ return function (req,res,pathname){
 					,'Content-Length': msgLength
 					,'Content-Range':`bytes ${range}-${msgLength - 1}/${msgLength}`
 				})
-				console.log(states.size - range,range,states.size)
 				let i=0
 				fs.createReadStream( pathname ,{start:range})
 					.on('error',(e)=>{
@@ -40,7 +39,7 @@ return function (req,res,pathname){
 		return
 	}else{
 		res.writeHead(413,{'Content-Type':'text/plain;charset=utf-8'})
-		res.end('We will not reutrn anything for this extname')
+		res.end('We will not reutrn anything for this extname '+pathname)
 	}
 }
 }
