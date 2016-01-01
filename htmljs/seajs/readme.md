@@ -1,0 +1,1 @@
+seajs3.0已经包含了preload插件
