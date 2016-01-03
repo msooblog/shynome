@@ -2,6 +2,7 @@
 // this.emit(event....argv)触发事件
 //run的回调函数也可以返回 [event,...argv] 来触发事件, 返回其他类型有可能出现错误
 //on:事件监听(event,cb)
+//cb(e,...argv)ps:e<=>事件本身
 //约定事件on回调函数返回'one'时,表示这个函数在这次调用完成从事件回调函数队列中删除
 //one的回调总是返回'one'
 +(function(cb){
@@ -27,10 +28,10 @@ var _event={
 		return this
 	}}
 	,get emit(){ return function( event ) {
-		var handler = this[ event ] , _self =this , argv = [].slice.apply(arguments,1)
+		var handler = this[ event ] , _self =this , argv = [].slice.apply(arguments,[1])
 		if( ! handler ) return this;
 		handler.forEach( function( e ,indeOf ,self ) { 
-			if( e.apply( _self ,argv ) === 'one' )handler.splice( indeOf ,1 ); 
+			if( e.apply( _self ,[_self].concat(argv) ) === 'one' )handler.splice( indeOf ,1 ); 
 		} )
 		return this
 	}}
