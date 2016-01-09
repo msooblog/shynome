@@ -1,14 +1,10 @@
 'use strict'
-{
-let tpl=(s,o)=>{
-	this.a=this.o=''
-	for(let i in o){
-		this.a+=`${i},`
-		this.o+=`o['${i}'],`
+module['exports']=(..._scope)=>{
+	_scope={s:_scope[0],o:_scope[1],a:'',v:''}
+	for(let i in _scope.v){_scope.a+=`${i},`;_scope.v+=`_scope.o['${i}'],`}
+	try{
+		return eval(`((${_scope.a.slice(0,-1)})=>${_scope.s})(${_scope.v.slice(0,-1)})`)
+	}catch(err){
+		return err.toString()
 	}
-	{
-		return eval(`((${this.a.slice(0,-1)})=>${s})(${this.o.slice(0,-1)})`)
-	}
-}
-module['exports']=tpl
 }

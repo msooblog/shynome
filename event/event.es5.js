@@ -11,7 +11,7 @@
 	if(typeof define === "function" && define.cmd){
 		define(name,null,function(require,exports,module){cb(require,"exports",module)})
 	}else if(typeof module === "object" && typeof module.exports === "object"  && typeof require === "function" ){
-		cb(require,exports,module)
+		cb(require,"exports",module)
 	}else if(window){
 		cb(function(v){return window[v]},name,window)
 	}else{
@@ -31,7 +31,14 @@ var _event={
 		var handler = this[ event ] , _self =this , argv = [].slice.apply(arguments,[1])
 		if( ! handler ) return this;
 		handler.forEach( function( e ,indeOf ,self ) { 
-			if( e.apply( _self ,[_self].concat(argv) ) === 'one' )handler.splice( indeOf ,1 ); 
+			var result
+			try{
+				result=e.apply( _self ,[_self].concat(argv))
+			}catch(error){
+				if( this.error && this.error.length>0 )result=this.emit('error',e,err);
+				else throw error;
+			}
+			if(  result === 'one' )handler.splice( indeOf ,1 ); 
 		} )
 		return this
 	}}
@@ -48,7 +55,13 @@ var _event={
 		var _self=this
 		if(typeof cb !== 'function' )return this;
 		var last= (function() { if( typeof process !== 'undefined' )return process.nextTick;else return false;})() || setTimeout
-		last(function(){ cb.apply( _self ,[ _self ]) },0)
+		last(function(){ 
+			try{
+				cb( _self ) 
+			}catch(error){
+				throw error
+			}
+		},0)
 		return this 
 	} }
 }
