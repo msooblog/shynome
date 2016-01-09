@@ -47,7 +47,7 @@ throw err : b is not defined
 	${a}
 `
 +(()=>a)()+
-+(function(){return a})()+
+(function(){return a})()+
 `
 </body>
 </html>
