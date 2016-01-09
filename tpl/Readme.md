@@ -5,12 +5,12 @@ es6 (...r)=>{}
  *ps:以后node支持es6模块加载会更新掉*
 #作用#
 ##与引用作用域分割  
-`
+``
 var b=7
 var tpl=require('./tpl')
-tpl("\`${a},${b}\`",{a:6})
+tpl("`${a},${b}`",{a:6})
 throw err : b is not defined
-`  
+``  
 *注:_scope是变量宿主，所以你可以访问到，但不推荐 *
 #增强#
 在node4.0里，引用了`fs`,`path`自带模块，使用`fs.readFileSync`增加了对小型文件的访问  
